@@ -329,7 +329,11 @@ void analysisClass::Loop()
      if( PhotonsmearPt->size() > 1 && PhotonLoosePt->size() == 1 ){
        bool morethanonetight = false;
        for(size_t i = 0; i < PhotonsmearPt->size() ; ++i  ){
-        if(std::hypot((PhotonsmearEta->at(i)-PhotonLooseEta->at(0)),(PhotonsmearPhi->at(i)-PhotonLoosePhi->at(0))) > 0.2  ){
+           double deltaPhi = std::abs(PhotonsmearPhi->at(i)-PhotonLoosePhi->at(0));
+           while (deltaPhi > M_PI) {
+               deltaPhi -= 2*M_PI;
+           }
+        if(std::hypot((PhotonsmearEta->at(i)-PhotonLooseEta->at(0)),deltaPhi) > 0.2  ){
          morethanonetight = true;
          break;
          
@@ -391,7 +395,11 @@ void analysisClass::Loop()
      size_t neletron =  electronPt->size();
      bool keepEvent = true;
     for (size_t j = 0; j < neletron; j++) {
-      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),(electronPhi->at(j)-gamma1.Phi()));
+        double deltaPhi = std::abs(electronPhi->at(j)-gamma1.Phi());
+        while (deltaPhi > M_PI) {
+            deltaPhi -= 2*M_PI;
+        }
+      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),deltaPhi);
       if (deltaR < 0.13) {
         keepEvent = false;
         break;
@@ -520,8 +528,6 @@ void analysisClass::Loop()
 	   }
 	   
 	 }
-         //if(std::hypot((jetEtaAK4->at(j)-gamma1.Eta()),(jetPhiAK4->at(j)-gamma1.Phi()))>=0.4)
-	 //     {
 	         jecFactors.push_back(correction);
 	         jerFactors.push_back(correction_SF);
 	         if(!isData && int(getPreCutValue1("useJERs"))==1) {
@@ -529,7 +535,6 @@ void analysisClass::Loop()
 	         }else{
 	         CorrFactors.push_back(correction);
 	         }
-	  //    }
 	//  std::cout<<"  j["<<j<<"] "<<" Jer factor : "<<correction_SF<<std::endl;
 	  Tmpjet.SetPtEtaPhiM(jetPtAK4->at(j)/jetJecAK4->at(j)*correction, jetEtaAK4->at(j), jetPhiAK4->at(j), jetMassAK4->at(j)/jetJecAK4->at(j)*correction);
 	  
