@@ -268,7 +268,11 @@ void analysisClass::Loop()
      size_t neletron =  electronPt->size();
      bool keepEvent = true;
     for (size_t j = 0; j < neletron; j++) {
-      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),(electronPhi->at(j)-gamma1.Phi()));
+        double deltaPhi = std::abs(electronPhi->at(j)-gamma1.Phi());
+        while (deltaPhi > M_PI) {
+            deltaPhi -= 2*M_PI;
+        }
+      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),deltaPhi);
       if (deltaR < 0.13) {
         keepEvent = false;
         break;
@@ -349,15 +353,12 @@ void analysisClass::Loop()
 	       
 	       
 	   }
-         //if(std::hypot((jetEtaAK4->at(j)-gamma1.Eta()),(jetPhiAK4->at(j)-gamma1.Phi()))>=0.4)
-	 //     {
 	         jecFactors.push_back(correction);
-	  //    }
 	  
 	  Tmpjet.SetPtEtaPhiM(jetPtPUPPI->at(j)/jetJecPUPPI->at(j)*correction, jetEtaPUPPI->at(j), jetPhiPUPPI->at(j), jetMassPUPPI->at(j)/jetJecPUPPI->at(j)*correction);
 	  
 	 sortedJets.insert(std::make_pair((jetPtPUPPI->at(j)/jetJecPUPPI->at(j))*correction, j));
-	 if(/*std::hypot((jetEtaAK4->at(j)-gamma1.Eta()),(jetPhiAK4->at(j)-gamma1.Phi()))*/ gamma1.DeltaR(Tmpjet) < 0.4)
+	 if(gamma1.DeltaR(Tmpjet) < 0.4)
 	      { 
 	         nfakejet++ ;
 	         fakejetIdx = j;
