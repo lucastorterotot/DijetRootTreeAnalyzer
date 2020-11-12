@@ -73,44 +73,24 @@ return isValid;
 
 }*/
 
-// Jet selection Cut ID from this twiki : https://twiki.cern.ch/twiki/bin/view/CMS/JetID13TeVRun2016
+// Jet selection Cut ID from this twiki : https://twiki.cern.ch/twiki/bin/view/CMS/JetID13TeVUL
 bool isNewonOldValidJetTight(const float& Eta_ak4, const float& nhf, const float& neMult, const float& chMult, const float& nemf, const float& muF, const float& chf, const float& cemF, const bool& isoldvalid, const bool& isDATA, const bool& hasgenjet, const bool& isFirst)
 {
-   
     int idL = -999 ;     
-  
-  if(fabs(Eta_ak4) > 3.0){
-    idL = ( neMult > 10 && nhf > 0.02 && nemf < 0.9 );
-  
-  }
-    
+    if(fabs(Eta_ak4) > 3.0){
+        idL = ( neMult > 10 && nhf > 0.2 && nemf < 0.9 );
+    }
     if(fabs(Eta_ak4) > 2.7  && fabs(Eta_ak4) <= 3.0)
     {
-       idL = ( nemf < 0.99 && neMult>2)  ;
-      
-      
-      }
-      
-      if(fabs(Eta_ak4) >= 2.4  && fabs(Eta_ak4) <= 2.7){
-        
-        idL = (nhf < 0.9 && nemf < 0.9  && neMult >1 && muF < 0.8);
-        
-        
-        
-      }
-      
-       if( fabs(Eta_ak4) < 2.4 ){
-  
-  
-          idL = (nhf < 0.9 && nemf < 0.9  && neMult >1 && muF < 0.8 && chMult > 0 && chf > 0 && cemF < 0.8) ;
-
-      }
-
-    
- return idL;
-
-    
-    
+        idL = ( nemf < 0.99 && nemf > 0.01 && neMult > 1)  ;
+    }
+    if(fabs(Eta_ak4) > 2.6  && fabs(Eta_ak4) <= 2.7){
+        idL = (nhf < 0.90 && nemf < 0.99  && chMult > 0 && muF < 0.8 && cemF < 0.8);
+    }
+    if( fabs(Eta_ak4) <= 2.6 ){
+        idL = (nhf < 0.90 && nemf < 0.90 && (neMult+chMult) > 1 && chf > 0  && chMult > 0 && muF < 0.8 && cemF < 0.8) ;
+    }
+    return idL;
 }
 
 
