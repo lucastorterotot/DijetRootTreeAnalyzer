@@ -350,7 +350,11 @@ void analysisClass::Loop()
      size_t neletron =  electronPt->size();
      bool keepEvent = true;
     for (size_t j = 0; j < neletron; j++) {
-      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),(electronPhi->at(j)-gamma1.Phi()));
+        double deltaPhi = std::abs(electronPhi->at(j)-gamma1.Phi());
+        while (deltaPhi > M_PI) {
+            deltaPhi -= 2*M_PI;
+        }
+      double deltaR = std::hypot((electronEta->at(j)-gamma1.Eta()),deltaPhi);
       if (deltaR < 0.13) {
         keepEvent = false;
         break;
